@@ -1,21 +1,19 @@
-# mega-detector
+# megadetector
 
 ## Setup
 
-### Run only once
+### Configure your environment (run only once)
 
 ```sh
 cd /share/$GROUP/$USER
 git clone https://github.com/Biodiversity-CatTracker2/megadetector.git
 cd megadetector
-```
 
-```sh
 chmod +x megadetector_setup.sh
 ./megadetector_setup.sh
 ```
 
-#### Connect to your Google Drive account (run only once)
+### Connect to your Google Drive account (run only once)
 
 ```sh
 ./rclone config
@@ -30,25 +28,31 @@ chmod +x megadetector_setup.sh
 # service_account_file> leave empty
 # y/n> n
 # y/n> n
-# COPY THE URL IN THE OUTPUT, AND OPEN IT IN YOUR BROWSER TO LOG IN, THEN COPY THE CODE THAT WILL SHOW UP
+# COPY THE URL IN THE OUTPUT, AND OPEN IT IN YOUR BROWSER TO LOG IN...
+#     ...THEN COPY THE CODE THAT WILL SHOW UP
 # config_verification_code> ENTER THE CODE YOU COPIED HERE
 # y/n> n
 # y/e/d> y
 # e/n/d/r/c/s/q> q
 ```
 
-### Run for every job
+## Run for every job
 
 #### Set folder name and job time
 
-- If the folder is shared and you're not the original owner of the folder (i.e., the folder appears only under "shared with me" tab in google drive), don't add "/shared_with_me/" in the `GOOGLE_DRIVE_FOLDER_FULL_PATH` input below. (`shared-with-me`)
-- If you're the one who created the folder (regardless of whether it's shared or not), type down the full path in the `GOOGLE_DRIVE_FOLDER_FULL_PATH` input below. (`not shared-with-me`)
+---
 
+##### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> NEEDS MANUAL EDITING
 ```sh
-set IMAGES_DIR="REPLACE_ME"  # EDIT THIS
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE_FOLDER_FULL_PATH"  # EDIT THIS
-set CONFIDENCE="REPLACE_ME"  # EDIT THIS
+set IMAGES_DIR="REPLACE_ME_WITH_FOLDER_NAME"  # EDIT THIS (ONLY THE FOLDER NAME, NOT THE FULL PATH)
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="/REPLACE/WITH/GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS (THE FULL PATH)*
+# *if you're not the original owner of the folder, don't add `/shared_with_me/` in `GOOGLE_DRIVE_FOLDER_FULL_PATH`;
+#     ...otherwise, type down the full path
+set CONFIDENCE="REPLACE_ME_WITH_CONFIDENCE_THRESHOLD"  # MUST BE DECIMAL
 ```
+##### END OF MANUAL EDITING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+---
 
 ```sh
 set TOTAL_NUM_OF_IMGS=`ls $IMAGES_DIR/*.JPG | wc -l`
@@ -62,17 +66,15 @@ echo "Will allocate $JOB_TIME minutes to the job"
 
 [See this section to know which command to use](####Set-folder-name-and-job-time)
 
-- If `shared-with-me`, use:
+- If you're **not** the original owner of the folder, use:
 
 ```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE_FOLDER_FULL_PATH"
 ./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
 ```
 
-- If `**not** shared-with-me`, use:
+- If you're the original owner of the folder, use:
 
 ```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE_FOLDER_FULL_PATH"
 ./rclone copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
 ```
 
@@ -86,13 +88,13 @@ bsub < run_mycode.csh $IMAGES_DIR $CONFIDENCE
 
 [See this section to know which command to use](####Set-folder-name-and-job-time)
 
-- If `shared-with-me`, use:
+- If you're **not** the original owner of the folder, use:
 
 ```sh
 ./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" -P
 ```
 
-- If `**not** shared-with-me`, use:
+- If you're the original owner of the folder, use:
 
 ```sh
 ./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" -P
