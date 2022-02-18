@@ -35,9 +35,9 @@ set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`  # DON'T EDIT
 
 ```sh
 # If you're the original owner of the folder, use:
-./rclone copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
+./rclone copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" --transfers 32 -P
 # If you're NOT the original owner of the folder, use:
-./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
+./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" --transfers 32 -P
 ```
 
 ### Set the job time
@@ -62,7 +62,7 @@ set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS (see c
 set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`  # DON'T EDIT
 
 # If you're the original owner of the folder, use:
-./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" -P
+./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" --transfers 32 -P
 # If you're NOT the original owner of the folder, use:
-./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" -P
+./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" --transfers 32 -P
 ```
