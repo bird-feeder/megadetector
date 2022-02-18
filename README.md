@@ -21,6 +21,19 @@ chmod +x megadetector_setup.sh
 
 ## Run for every job
 
+### Download the data from Google Drive
+
+```sh
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="/REPLACE/WITH/GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS (see comments)*
+# *if you're not the original owner of the folder, don't add `/shared_with_me/` in `GOOGLE_DRIVE_FOLDER_FULL_PATH`;
+#     ...otherwise, type down the full path
+
+# If you're the original owner of the folder, use:
+./rclone copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
+# If you're NOT the original owner of the folder, use:
+./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
+```
+
 ### Set folder name and confidence threshold
 
 ```sh
@@ -36,19 +49,6 @@ set JOB_TIME=`expr $TOTAL_NUM_OF_IMGS / 60`
 if ( $JOB_TIME < 10 ) set JOB_TIME=10
 sed -i "/#BSUB -W/c\#BSUB -W $JOB_TIME # <<<<<<<<<<<<<< EDIT TIME! (in minutes)" megadetector_job.csh
 echo "Will allocate $JOB_TIME minutes to the job"
-```
-
-### Download the data from Google Drive
-
-```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="/REPLACE/WITH/GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS (see comments)*
-# *if you're not the original owner of the folder, don't add `/shared_with_me/` in `GOOGLE_DRIVE_FOLDER_FULL_PATH`;
-#     ...otherwise, type down the full path
-
-# If you're the original owner of the folder, use:
-./rclone copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
-# If you're NOT the original owner of the folder, use:
-./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" -P
 ```
 
 ### Submit the job
