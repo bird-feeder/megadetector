@@ -28,7 +28,7 @@ set IMAGES_DIR="REPLACE_ME_WITH_FOLDER_NAME"  # EDIT THIS (ONLY THE FOLDER NAME,
 set CONFIDENCE="REPLACE_ME_WITH_CONFIDENCE_THRESHOLD"  # MUST BE DECIMAL
 ```
 
-#### Set the job time assuming `$TOTAL_NUM_OF_IMGS / 2 / 60 + $TOTAL_NUM_OF_IMGS / 4 / 60`
+#### Set the job time assuming `$TOTAL_NUM_OF_IMGS / 60`
 
 ```sh
 set TOTAL_NUM_OF_IMGS=`ls $IMAGES_DIR/*.JPG | wc -l`
