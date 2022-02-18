@@ -21,14 +21,14 @@ chmod +x megadetector_setup.sh
 
 ## Run for every job
 
-#### Set folder name and confidence threshold
+### Set folder name and confidence threshold
 
 ```sh
 set IMAGES_DIR="REPLACE_ME_WITH_FOLDER_NAME"  # EDIT THIS (ONLY THE FOLDER NAME, NOT THE FULL PATH)
 set CONFIDENCE="REPLACE_ME_WITH_CONFIDENCE_THRESHOLD"  # MUST BE DECIMAL
 ```
 
-#### Set the job time assuming `$TOTAL_NUM_OF_IMGS / 60`
+### Set the job time assuming `$TOTAL_NUM_OF_IMGS / 60`
 
 ```sh
 set TOTAL_NUM_OF_IMGS=`ls $IMAGES_DIR/*.JPG | wc -l`
