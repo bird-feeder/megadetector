@@ -1,30 +1,9 @@
-# bsub -Is -n 1 -W 100 -q gpu -R "select[rtx2080||gtx1080||p100]" -gpu "num=2:mode=shared:mps=yes" tcsh
-
-# module load conda cuda tensorflow
-
-# change this line in `CameraTraps/detection/run_tf_detector.py`
-"""
-        self.tf_session = tf.Session(config=config, graph=detection_graph)
-# to: 
-from tensorflow.compat.v1 import ConfigProto
-        config = ConfigProto()
-        config.gpu_options.allow_growth = True
-        self.tf_session = tf.Session(config=config, graph=detection_graph)
-"""
-
-# set AVAIL_GPUS=`python -c "import GPUtil;print(','.join([str(x) for x in GPUtil.getAvailable(order='load', limit=1, maxLoad=0.5, maxMemory=0.5, includeNan=False, excludeID=[], excludeUUID=[])]))"`
-
-# set AVAIL_GPUS=`python get_avail_gpus.py`
-
-# set IMAGES_DIR="sample"
-# set CONFIDENCE="0.01"
-# setenv CUDA_VISIBLE_DEVICES "$AVAIL_GPUS"; python megadetector.py --images-dir "/gpfs_common/share03/$GROUP/$USER/megadetector/$IMAGES_DIR" --confidence "$CONFIDENCE"
-
 import json
 import os
 import shutil
 import sys
 import time
+import traceback
 from datetime import datetime
 from glob import glob
 from pathlib import Path
@@ -132,6 +111,7 @@ if __name__ == '__main__':
                 break
             if arg == '--images-dir':
                 images_dir = next_arg
+                logger.debug(f'Images directory: {images_dir}')
                 assert Path(images_dir).exists(
                 ), 'Specified images path does not exist'
             elif arg == '--confidence':
