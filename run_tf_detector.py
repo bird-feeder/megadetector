@@ -1,7 +1,7 @@
 r"""
-
-## EDITED TO WORK WITH SHARED GPUs
-
+# SOURCE: https://github.com/microsoft/CameraTraps/blob/main/detection/run_tf_detector.py
+# EDITED TO WORK WITH SHARED GPUs
+#-----------------------------------------------------------------------------
 
 Module to run a TensorFlow animal detection model on images.
 

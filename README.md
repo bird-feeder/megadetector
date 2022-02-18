@@ -9,8 +9,8 @@ cd /share/$GROUP/$USER
 git clone https://github.com/Biodiversity-CatTracker2/megadetector.git
 cd megadetector
 
-chmod +x megadetector_setup.sh
-./megadetector_setup.sh
+chmod +x configure.csh
+./configure.csh
 ```
 
 ### Connect to your Google Drive account (run only once)
@@ -24,9 +24,8 @@ chmod +x megadetector_setup.sh
 ### Set folder name and confidence threshold
 
 ```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS (see comments)*
-# *if you're not the original owner of the folder, don't type `Shared with me` in `GOOGLE_DRIVE_FOLDER_FULL_PATH`;
-#     ...otherwise, type down the full path
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS*
+# *IMPORTANT: if the folder is under the "shared with me" tab, DO NOT add `Shared with me` in the path!
 set CONFIDENCE="REPLACE_ME_WITH_CONFIDENCE_THRESHOLD"  # EDIT THIS (MUST BE DECIMAL)
 set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`  # DON'T EDIT
 ```
@@ -56,9 +55,8 @@ bsub -env "IMAGES_DIR='$IMAGES_DIR', CONFIDENCE='$CONFIDENCE', GROUP='$GROUP', U
 ### Upload the data to Google Drive when the job is complete
 
 ```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS (see comments)*
-# *if you're not the original owner of the folder, don't type `Shared with me` in `GOOGLE_DRIVE_FOLDER_FULL_PATH`;
-#     ...otherwise, type down the full path
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="GOOGLE_DRIVE/FOLDER/PATH"  # EDIT THIS*
+# *IMPORTANT: if the folder is under the "shared with me" tab, DO NOT add `Shared with me` in the path!
 set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`  # DON'T EDIT
 
 # If you're the original owner of the folder, use:
