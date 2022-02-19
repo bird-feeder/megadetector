@@ -20,7 +20,8 @@ from CameraTraps.visualization import visualize_detector_output
 
 
 def setup_dirs(images_dir):
-    images_list = glob(f'{images_dir}/*.JPG')
+    img_extensions = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']
+    images_list = sum([glob(f'{images_dir}/*{ext}') for ext in img_extensions], [])
     logger.debug(f'Images directory: {images_dir}')
     output_folder = f'{images_dir}/output'
     visualization_dir = f'{output_folder}/tmp'
@@ -33,6 +34,10 @@ def setup_dirs(images_dir):
 
 
 def filter_output(data, output_folder, visualization_dir, images_dir):
+    animal_only = False
+    if '--animal-only' in sys.argv:
+        animal_only = True
+        logger.info('--animal-only mode is TRUE')
     for image in tqdm(data['images']):
         if not image['detections']:
             out_path_nd = f'{output_folder}/no_detections/{Path(image["file"]).name}'
@@ -40,6 +45,9 @@ def filter_output(data, output_folder, visualization_dir, images_dir):
                 shutil.copy2(image['file'], out_path_nd)
 
         elif image['detections']:
+            if animal_only:
+                if any([True if x['category'] == '1' else False for x in image['detections']]):
+                    continue
             img_file = visualization_dir + '/anno_' + images_dir.replace(
                 '/', '~') + '~' + Path(image['file']).name
             out_path_with_bb = f'{images_dir}/output/with_detections_and_bb/{Path(img_file).name}'
