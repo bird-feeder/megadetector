@@ -26,9 +26,8 @@ chmod +x configure.csh
 
 ```sh
 # IMPORTANT: Don't type "shared with me" or "My Drive" in GOOGLE_DRIVE_FOLDER_FULL_PATH!
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="THIS/IS/PLACEHOLDER"
-set CONFIDENCE="PLACEHOLDER"
-# Don't edit the line below
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="THIS/IS/PLACEHOLDER"  # EDIT THIS
+set CONFIDENCE="PLACEHOLDER"  # EDIT THIS (MUST BE DECIMAL!, 0.0-1.0)
 set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
 ```
 
@@ -58,11 +57,11 @@ bsub -env "IMAGES_DIR='$IMAGES_DIR', CONFIDENCE='$CONFIDENCE', GROUP='$GROUP', U
 ### Upload the data to Google Drive when the job is complete
 
 ```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="THIS/IS/PLACEHOLDER"
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="THIS/IS/PLACEHOLDER"  # EDIT THIS
 set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
 
 # If you're the original owner of the folder, use:
-./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" --transfers 32 -P
+./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH/output" --transfers 32 -P
 # If you're NOT the original owner of the folder, use:
-./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" --transfers 32 -P
+./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH/output" --transfers 32 -P
 ```
