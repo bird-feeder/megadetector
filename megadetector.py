@@ -30,6 +30,7 @@ def setup_dirs(images_dir):
         with open(args.skip_list) as j:
             skip_list = json.load(j)
         images_list = list(set(skip_list) ^ set([Path(x).name for x in images_list]))
+        images_list = [f'{images_dir}/{x}' for x in images_list]
         logger.info(f'Skipped {images_list_len - len(images_list)} image')
 
     logger.info(f'Will process {len(images_list)} images')
@@ -85,7 +86,7 @@ def main(images_dir, confidence, restored_results):
     results = run_tf_detector_batch.load_and_run_detector_batch(
         model_file='megadetector_v4_1_0.pb',
         image_file_names=images_list,
-        checkpoint_path=ckpt_file,
+        checkpoint_path=args.resume,
         confidence_threshold=confidence,
         checkpoint_frequency=100,
         results=restored_results,
@@ -137,10 +138,10 @@ if __name__ == '__main__':
     logger.add(f'logs/logs_{ts}.log')
     parser = argparse.ArgumentParser()
     parser.add_argument('--images-dir', type=str, help='Path to the source images folder (local)', required=True)
-    parser.add_argument('--confidence', type=float, help='Confidence threshold', required=True)
-    parser.add_argument('--resume', help='Resume from last checkpoint', default=False, action='store_true')
+    parser.add_argument('--confidence', help='Confidence threshold', required=True)
+    parser.add_argument('--resume', help='Resume from last checkpoint')
     parser.add_argument('--animal-only', help='Only filter animal detections', default=False, action='store_true')
-    parser.add_argument('--skip-list', type=str, help='Path to the skip list file')
+    parser.add_argument('--skip-list', help='Path to the skip list file')
     args = parser.parse_args()
     
     try:
@@ -148,20 +149,18 @@ if __name__ == '__main__':
         assert Path(args.images_dir).exists(
         ), 'Specified images path does not exist'
         assert isinstance(
-            args.confidence,
+            float(args.confidence),
             float), 'Confidence threshold needs to be a decimal number'
     except AssertionError as err:
         logger.exception(err)
         sys.exit(1)
 
-    ckpt_file = f'{args.images_dir}/output/checkpoint_{ts}.json'
-
     if args.resume:
         try:
-            assert Path(ckpt_file).exists(
-            ), f'Could not find a checkpoint file {ckpt_file}'
+            assert Path(args.resume).exists(
+            ), f'Could not find a checkpoint file {args.resume}'
 
-            with open(ckpt_file) as f:
+            with open(args.resume) as f:
                 saved = json.load(f)
 
             assert 'images' in saved, \
@@ -175,6 +174,7 @@ if __name__ == '__main__':
             logger.exception(err)
             sys.exit(1)
     else:
+        args.resume = f'{args.images_dir}/output/checkpoint_{ts}.json'
         restored_results = []
 
-    main(args.images_dir, args.confidence, restored_results)
+    main(args.images_dir, float(args.confidence), restored_results)
