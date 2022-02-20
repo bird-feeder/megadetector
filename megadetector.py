@@ -23,7 +23,18 @@ from CameraTraps.visualization import visualize_detector_output
 def setup_dirs(images_dir):
     img_extensions = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']
     images_list = sum([glob(f'{images_dir}/*{ext}') for ext in img_extensions], [])
+    images_list_len = len(images_list)
+    logger.info(f'Number of images in the folder: {images_list_len}')
+
+    if args.skip_list:
+        with open(args.skip_list) as j:
+            skip_list = json.load(j)
+        images_list = list(set(skip_list) ^ set(images_list))
+        logger.info(f'Skipped {images_list_len - len(images_list)} image')
+
+    logger.info(f'Will process {len(images_list)} images')
     logger.debug(f'Images directory: {images_dir}')
+    
     output_folder = f'{images_dir}/output'
     visualization_dir = f'{output_folder}/tmp'
     Path(output_folder).mkdir(exist_ok=True)
@@ -129,6 +140,7 @@ if __name__ == '__main__':
     parser.add_argument('--confidence', type=float, help='Confidence threshold', required=True)
     parser.add_argument('--resume', help='Resume from last checkpoint', default=False, action='store_true')
     parser.add_argument('--animal-only', help='Only filter animal detections', default=False, action='store_true')
+    parser.add_argument('--skip-list', type=str, help='Path to the skip list file')
     args = parser.parse_args()
     
     try:

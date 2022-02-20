@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import sys
@@ -9,14 +10,28 @@ from loguru import logger
 from tqdm import tqdm
 
 
-def main(data_file):
+def mongodb():
+    dotenv.load_dotenv()
     client = pymongo.MongoClient(os.environ['DB_CONNECTION_STRING'])
     db = client[os.environ['DB_NAME']]
+    return db
+
+
+def skip_list():
+    db = mongodb()
+    data = db.completed.find().distinct('_id')
+    with open('skip_list.json', 'w') as j:
+        json.dump(data, j)
+    logger.info(f'Skip list file path: {Path("skip_list.json").absolute()}')
+
+
+def main(data_file):
+    db = mongodb()
     col = db.completed
 
+    logger.info(f'Processing: {data_file}')
     with open(data_file) as j:
         data = json.load(j)
-
     logger.info(f'Number of documents to add: {len(data["images"])}')
 
     for image in tqdm(data['images']):
@@ -39,7 +54,12 @@ def main(data_file):
 
 
 if __name__ == '__main__':
-    dotenv.load_dotenv()
-    assert len(sys.argv) > 1, 'You need to specify a data file path!'
-    assert Path(sys.argv[1]).exists(), 'The specified path does not exist!'
-    main(sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data', type=str, help='Path to the .json output data file')
+    parser.add_argument('--get-skip-list', action='store_true', help='Get a list of files to skip')
+    args = parser.parse_args()
+    if args.data:
+        assert Path(args.data).exists(), 'The specified path does not exist!'
+        main(args.data)
+    if args.get_skip_list:
+        skip_list()

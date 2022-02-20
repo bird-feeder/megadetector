@@ -154,3 +154,4 @@ cython_debug/
 # Other
 .DS_Store
 data_*.json
+skip_list.json
