@@ -29,7 +29,7 @@ def setup_dirs(images_dir):
     if args.skip_list:
         with open(args.skip_list) as j:
             skip_list = json.load(j)
-        images_list = list(set(skip_list) ^ set(images_list))
+        images_list = list(set(skip_list) ^ set([Path(x).name for x in images_list]))
         logger.info(f'Skipped {images_list_len - len(images_list)} image')
 
     logger.info(f'Will process {len(images_list)} images')
