@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import shutil
@@ -34,33 +35,35 @@ def setup_dirs(images_dir):
 
 
 def filter_output(data, output_folder, visualization_dir, images_dir):
-    animal_only = False
-    if '--animal-only' in sys.argv:
-        animal_only = True
+    if args.animal_only:
         logger.info('--animal-only mode is TRUE')
+
     for image in tqdm(data['images']):
         if not image['detections']:
             out_path_nd = f'{output_folder}/no_detections/{Path(image["file"]).name}'
-            if not Path(out_path_nd).exists():
-                shutil.copy2(image['file'], out_path_nd)
+            shutil.copy2(image['file'], out_path_nd)
 
-        elif image['detections']:
-            if animal_only:
-                if any([True if x['category'] == '1' else False for x in image['detections']]):
-                    continue
-            img_file = visualization_dir + '/anno_' + images_dir.replace(
-                '/', '~') + '~' + Path(image['file']).name
-            out_path_with_bb = f'{images_dir}/output/with_detections_and_bb/{Path(img_file).name}'
-            if not Path(out_path_with_bb).exists():
+        else:
+            if args.animal_only:
+                files = []
+                for detection in image['detections']:
+                    if detection['category'] == '1':
+                        files.append(str(Path(image["file"])))
+            else:
+                files = [image['file']]
+
+            for file in files:
+                img_file = visualization_dir + '/anno_' + images_dir.replace(
+                    '/', '~') + '~' + Path(file).name
+                out_path_with_bb = f'{images_dir}/output/with_detections_and_bb/{Path(img_file).name}'
                 shutil.copy2(img_file, out_path_with_bb)
-            out_path_wd = f'{images_dir}/output/with_detections/{Path(image["file"]).name}'
-            if not Path(out_path_wd).exists():
-                shutil.copy2(image['file'], out_path_wd)
+                out_path_wd = f'{images_dir}/output/with_detections/{Path(file).name}'
+                shutil.copy2(file, out_path_wd)
 
     return f"{output_folder}/no_detections", f"{output_folder}/with_detections"
 
 
-def main(images_dir, restored_results):
+def main(images_dir, confidence, restored_results):
     logger.debug(tf.__version__)
     logger.debug(f'GPU available: {tf.test.is_gpu_available()}')
 
@@ -117,42 +120,31 @@ def main(images_dir, restored_results):
     logger.info(f'Number of images with detections: {len_wd}')
     logger.info(f'Data file path: {output_file_path}')
 
-    shutil.rmtree(visualization_dir)
-
 
 if __name__ == '__main__':
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
     logger.add(f'logs/logs_{ts}.log')
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--images-dir', type=str, help='Path to the source images folder (local)', required=True)
+    parser.add_argument('--confidence', type=float, help='Confidence threshold', required=True)
+    parser.add_argument('--resume', help='Resume from last checkpoint', default=False, action='store_true')
+    parser.add_argument('--animal-only', help='Only filter animal detections', default=False, action='store_true')
+    args = parser.parse_args()
+    
     try:
-        assert all(True if arg in sys.argv else False
-                   for arg in ['--confidence', '--images-dir'])
-
-        for arg in sys.argv:
-            try:
-                next_arg = sys.argv[sys.argv.index(arg) + 1]
-            except IndexError:
-                break
-
-            if arg == '--images-dir':
-                images_dir = next_arg
-                logger.debug(f'Images directory: {images_dir}')
-                assert Path(images_dir).exists(
-                ), 'Specified images path does not exist'
-
-            elif arg == '--confidence':
-                assert isinstance(
-                    float(next_arg),
-                    float), 'Confidence threshold needs to be a decimal number'
-                confidence = float(next_arg)
-
+        logger.debug(f'Images directory: {args.images_dir}')
+        assert Path(args.images_dir).exists(
+        ), 'Specified images path does not exist'
+        assert isinstance(
+            args.confidence,
+            float), 'Confidence threshold needs to be a decimal number'
     except AssertionError as err:
         logger.exception(err)
         sys.exit(1)
 
-    ckpt_file = f'{images_dir}/output/checkpoint_{ts}.json'
+    ckpt_file = f'{args.images_dir}/output/checkpoint_{ts}.json'
 
-    if '--resume' in sys.argv:
+    if args.resume:
         try:
             assert Path(ckpt_file).exists(
             ), f'Could not find a checkpoint file {ckpt_file}'
@@ -173,4 +165,4 @@ if __name__ == '__main__':
     else:
         restored_results = []
 
-    main(images_dir, restored_results)
+    main(args.images_dir, args.confidence, restored_results)
