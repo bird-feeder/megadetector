@@ -20,48 +20,14 @@ chmod +x configure.csh
 # Follow the prompts (name the new remote: gdrive)
 ```
 
-## Run for every job
-
-### Set folder name and confidence threshold
+## Submit a job
 
 ```sh
-# IMPORTANT: Don't type "shared with me" or "My Drive" in GOOGLE_DRIVE_FOLDER_FULL_PATH!
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="THIS/IS/PLACEHOLDER"  # EDIT THIS
-set CONFIDENCE="PLACEHOLDER"  # EDIT THIS (MUST BE DECIMAL!, 0.0-1.0)
-set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
+./submit.csh
 ```
 
-### Download the data from Google Drive
+## Upload the data to Google Drive when the job is complete
 
 ```sh
-# If you're the original owner of the folder, use:
-./rclone copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" --transfers 32 -P
-# If you're NOT the original owner of the folder, use:
-./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" --transfers 32 -P
-```
-
-### Set the job time
-
-```sh
-# Edit the line below to change the job time (hh:mm)
-set JOB_TIME="01:00"
-sed -i "/#BSUB -W/c\#BSUB -W $JOB_TIME" megadetector_job.csh
-```
-
-### Submit the job
-
-```sh
-bsub -env "IMAGES_DIR='$IMAGES_DIR', CONFIDENCE='$CONFIDENCE', GROUP='$GROUP', USER='$USER'" < megadetector_job.csh
-```
-
-### Upload the data to Google Drive when the job is complete
-
-```sh
-set GOOGLE_DRIVE_FOLDER_FULL_PATH="THIS/IS/PLACEHOLDER"  # EDIT THIS
-set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
-
-# If you're the original owner of the folder, use:
-./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH/output" --transfers 32 -P
-# If you're NOT the original owner of the folder, use:
-./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH/output" --transfers 32 -P
+./upload.csh
 ```

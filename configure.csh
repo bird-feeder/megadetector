@@ -1,5 +1,28 @@
 #!/bin/tcsh
 
+cat <<'EOF'
+
+                                                           .
+                  .                                    .::'
+                  `::.          CONFIGURATION        .`  :
+                   :  '.            SCRIPT         .`o    :
+                  :    o'.                        ~~}     :
+                  :     {~~                        `:     `:.
+                .:`     :'                          :    .:   `.
+             .`   :.    :                           :   :       `.
+           .`       :   :                           `.   `.       :
+          :       .'   .'                            `.    `..    :
+          :    ..'    .'   MOHAMMAD ALYETAMA          `:.. '.````:
+          :''''.' ..:'     malyeta@ncsu.edu              ::`::`:   :.      .
+        .:   :'::'::        ..........................:"``````'"`:   `:""": :
+.:"""""""""""`''''''""""""""                     ...........""""""`:   `:"`,'
+:                            ..........""""""""""                   ':   `:
+`............."""""""""""""""                                         `..:'
+  `:..'
+
+'EOF'
+
+sleep 1
 module load conda cuda tensorflow
 pip install --user loguru humanfriendly jsonpickle GPUtil python-dotenv tqdm "pymongo[srv]"
 
@@ -23,3 +46,6 @@ rm rclone-current-linux-amd64.zip
 rm -rf rclone-*-linux-amd64
 
 mkdir -p logs
+
+chmod +x submit.csh
+chmod +x upload.csh
