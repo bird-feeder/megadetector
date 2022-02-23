@@ -39,11 +39,11 @@ chmod +x configure.csh
 ## Submit a job
 
 ```sh
-./submit.csh
+./submit
 ```
 
 ## Upload the data to Google Drive when the job is complete
 
 ```sh
-./upload.csh
+./upload
 ```

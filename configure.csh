@@ -47,5 +47,7 @@ rm -rf rclone-*-linux-amd64
 
 mkdir -p logs
 
-chmod +x submit.csh
-chmod +x upload.csh
+mv submit.csh submit
+chmod +x submit
+mv upload.csh upload
+chmod +x upload
