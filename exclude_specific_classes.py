@@ -49,9 +49,6 @@ def main():
     detections_folder = f'{args.images_dir}/output/with_detections'
     Path(f'{detections_folder}_excluded').mkdir(exist_ok=True)
 
-    model = tf.keras.applications.EfficientNetB0(weights='imagenet',
-                                                 include_top=True)
-
     df = pd.read_csv(
         'https://raw.githubusercontent.com/noameshed/novelty-detection/master/imagenet_categories.csv'
     )
@@ -84,4 +81,6 @@ def main():
 if __name__ == '__main__':
     logger.add('exclude_specific_classes.log')
     args = opts()
+    model = tf.keras.applications.EfficientNetB0(weights='imagenet',
+                                                 include_top=True)
     main()

@@ -24,14 +24,11 @@ malyeta@ncsu.edu                            `  `.`.`._`.-._`--.)
                                                  `-^---^--.`--
 'EOF'
 
-echo "Answer the prompts...\n"
 
-printf "ENTER THE FULL GOOGLE DRIVE FOLDER PATH (DO NOT INCLUDE 'SHARED WITH ME' OR 'MY DRIVE' IN THE PATH!): "
-set GOOGLE_DRIVE_FOLDER_FULL_PATH=$<
+set GOOGLE_DRIVE_FOLDER_FULL_PATH="picam"
 set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
 
-printf "ENTER THE DESIRED CONFIDENCE THRESHOLD (MUST BE DECIMAL BETWEEN 0.0-1.0!): "
-set CONFIDENCE=$<
+set CONFIDENCE="0.8"
 
 printf "ENTER THE JOB TIME (MUST BE IN hh:mm; for example: 01:30): "
 set JOB_TIME=$<

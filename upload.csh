@@ -17,11 +17,7 @@ malyeta@ncsu.edu                      '----'
 
 'EOF'
 
-
-printf "ENTER THE FULL GOOGLE DRIVE FOLDER PATH (DO NOT INCLUDE 'SHARED WITH ME' OR 'MY DRIVE' IN THE PATH!): "
-set GOOGLE_DRIVE_FOLDER_FULL_PATH=$<
-set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
-
+set NEW_FOLDER_NAME="downloaded_`date +%m-%d-%Y`"
 printf "ARE YOU THE ORIGINAL OWNER OF THE FOLDER (Y/N)? "
 set RCLONE_ANS=$<
 
@@ -33,7 +29,11 @@ cat <<'EOF'
                                                                           
 'EOF'
 
-if ( $RCLONE_ANS == y | $RCLONE_ANS == Y ) ./rclone copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH/output" --transfers 32 -P --stats-one-line
-if ( $RCLONE_ANS == n | $RCLONE_ANS == N ) ./rclone --drive-shared-with-me copy "$IMAGES_DIR/output" gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH/output" --transfers 32 -P --stats-one-line
+if ( $RCLONE_ANS == y | $RCLONE_ANS == Y ) set DRIE_SHARED_WITH_ME=""
+if ( $RCLONE_ANS == n | $RCLONE_ANS == N ) set DRIVE_SHARED_WITH_ME="--drive-shared-with-me"
+
+eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/" --include "*.json" --max-depth 1 gdrive:"picam-detections/$NEW_FOLDER_NAME" --transfers 32 -P --stats-one-line'
+eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/with_detections" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections" --transfers 32 -P --stats-one-line'
+eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/with_detections_excluded" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections_excluded" --transfers 32 -P --stats-one-line'
 
 echo "\nFinished uploading!\n"
