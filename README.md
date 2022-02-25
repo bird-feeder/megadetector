@@ -6,7 +6,7 @@
 
 ```sh
 cd /share/$GROUP/$USER
-git clone git@github.com:bird-feeder/megadetector.git
+git clone https://github.com/bird-feeder/megadetector.git
 cd megadetector
 
 chmod +x configure.csh
