@@ -47,7 +47,10 @@ chmod +x configure.csh
 
 ```sh
 set NEW_FOLDER_NAME="downloaded_`date +%m-%d-%Y`"
+# If you're the original owner, run:
 ./rclone move -P --transfers 32 --stats-one-line --max-depth 1 --filter "+ *.jpg" --filter "- *" gdrive:"picam" gdrive:"picam-downloaded/$NEW_FOLDER_NAME"
+# If you're NOT the original owner, run:
+./rclone --drive-shared-with-me move -P --transfers 32 --stats-one-line --max-depth 1 --filter "+ *.jpg" --filter "- *" gdrive:"picam" gdrive:"picam-downloaded/$NEW_FOLDER_NAME"
 ```
 
 
@@ -79,7 +82,10 @@ ssh ubuntu@<REPLACE_WITH_SERVER_IP>
 ```sh
 cd "/home/ubuntu/apps/label-studio"
 NEW_FOLDER_NAME="local-files/picam/downloaded_$(date +%m-%d-%Y)"
+# If you're the original owner, run:
 rclone copy gdrive:"downloaded_$(date +%m-%d-%Y)" "$NEW_FOLDER_NAME" -P --stats-one-line --transfers 32
+# If you're NOT the original owner, run:
+rclone --drive-shared-with-me copy gdrive:"downloaded_$(date +%m-%d-%Y)" "$NEW_FOLDER_NAME" -P --stats-one-line --transfers 32
 ```
 
 - Sync the files
