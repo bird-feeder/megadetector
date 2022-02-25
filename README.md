@@ -64,3 +64,26 @@ python exclude_specific_classes.py --images-dir "picam" --exclude "fox_squirrel"
 ```sh
 ./upload
 ```
+
+
+## Sync the images on label-studio
+
+- Log in to the remote server
+
+```sh
+ssh ubuntu@<REPLACE_WITH_SERVER_IP>
+```
+
+- Download the files
+
+```sh
+cd "/home/ubuntu/apps/label-studio"
+NEW_FOLDER_NAME="local-files/picam/downloaded_$(date +%m-%d-%Y)"
+rclone copy gdrive:"downloaded_$(date +%m-%d-%Y)" "$NEW_FOLDER_NAME" -P --stats-one-line --transfers 32
+```
+
+- Sync the files
+
+```sh
+python sync_picam.py
+```
