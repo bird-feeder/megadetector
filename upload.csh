@@ -35,6 +35,5 @@ if ( $RCLONE_ANS == n | $RCLONE_ANS == N ) set DRIVE_SHARED_WITH_ME="--drive-sha
 eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/" --include "*.json" --max-depth 1 gdrive:"picam-detections/$NEW_FOLDER_NAME" --transfers 32 -P --stats-one-line'
 eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/with_detections" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections" --transfers 32 -P --stats-one-line'
 eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/with_detections_excluded" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections_excluded" --transfers 32 -P --stats-one-line'
-eval 'set META="picam/output/meta.txt"; ./rclone $DRIVE_SHARED_WITH_ME size --filter "+ *.jpg" --filter "- *.json" gdrive:picam-detections/$NEW_FOLDER_NAME > "$META" && ./rclone $DRIVE_SHARED_WITH_ME copy "$META" gdrive:picam-detections/$NEW_FOLDER_NAME
 
 echo "\nFinished uploading!\n"
