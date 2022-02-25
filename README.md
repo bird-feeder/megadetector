@@ -7,7 +7,7 @@
 ```sh
 cd /share/$GROUP/$USER
 git clone https://github.com/bird-feeder/megadetector.git megadetector_picam
-cd megadetector
+cd megadetector_picam
 
 chmod +x configure.csh
 ./configure.csh
