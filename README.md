@@ -85,10 +85,22 @@ python exclude_specific_classes.py --images-dir "picam" --exclude "fox_squirrel"
 ssh ubuntu@<REPLACE_WITH_SERVER_IP>
 ```
 
-- Download the files
+- Switch directory
 
 ```sh
 cd "/home/ubuntu/apps/label-studio"
+```
+
+
+- Backup the current data
+
+```sh
+source .env && docker run --rm -v "$PWD/pg_backups:/backups" -e POSTGRES_HOST=${_POSTGRES_HOST} -e POSTGRES_DB=${POSTGRE_NAME} -e POSTGRES_USER=${POSTGRE_USER} -e POSTGRES_PASSWORD=${POSTGRE_PASSWORD} prodrigestivill/postgres-backup-local /backup.sh
+```
+
+- Download the files
+
+```sh
 NEW_FOLDER_NAME="local-files/picam/downloaded_$(date +%m-%d-%Y)"
 # If you're the original owner, run:
 rclone copy gdrive:"downloaded_$(date +%m-%d-%Y)" "$NEW_FOLDER_NAME" -P --stats-one-line --transfers 32
