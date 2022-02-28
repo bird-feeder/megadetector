@@ -36,6 +36,14 @@ chmod +x configure.csh
 # e/n/d/r/c/s/q> q
 ```
 
+---
+
+## Switch directory
+
+```sh
+cd /share/$GROUP/$USER/megadetector_picam
+```
+
 ## Submit a job
 
 ```sh
