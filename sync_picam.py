@@ -33,7 +33,7 @@ def main():
             break
 
     if not EXISTS:
-        data = "{" + f'"path":"{_PATH}","title":"{TITLE}","regex_filter":".*jpg","use_blob_urls":"true","project":5' + "}"
+        data = "{" + f'"path":"{_PATH}","title":"{TITLE}","regex_filter":".*jpg","use_blob_urls":"true","project":1' + "}"
         resp = requests.post(url, headers=headers, data=data)
         response = resp.json()
         logger.info(f'Create new local storage response: {response}')
@@ -42,7 +42,7 @@ def main():
         storage_id = x['id']
 
     logger.debug('Running sync...')
-    url = f'https://ls.aibird.me/api/storages/localfiles/{storage_id}/sync?project=5'
+    url = f'https://ls.aibird.me/api/storages/localfiles/{storage_id}/sync?project=1'
     resp = requests.post(url, headers=headers)
     logger.info(f'Sync response: {resp.json()}')
 
