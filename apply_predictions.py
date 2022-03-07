@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -32,7 +33,7 @@ def get_all_tasks(project_id):
 
 
 def find_image(img_name):
-    for im in mm_data['images']:
+    for im in md_data['images']:
         if Path(im['file']).name == img_name:
             return im
 
@@ -46,11 +47,11 @@ def main(task_id):
         img = task_['data']['image']
     else:
         return
-    mm_preds = find_image(Path(img).name)
+    md_preds = find_image(Path(img).name)
 
     results = []
     scores = []
-    for item in mm_preds['detections']:
+    for item in md_preds['detections']:
         if item['category'] != '1':
             continue
         x, y, width, height = [x * 100 for x in item['bbox']]
@@ -82,22 +83,31 @@ def main(task_id):
     url = "https://ls.aibird.me/api/predictions/"
     resp = requests.post(url, headers=headers, data=json.dumps(post_))
     logger.debug(resp.json())
+    return resp
 
 
 if __name__ == '__main__':
-    # mm_data_file = 'data_.json'
+    logger.add('apply_predictions.log')
+    # md_data_file = 'data_.json'
     if len(sys.argv) == 1:
         raise Exception('You need to provide a path to the output data file!')
     if not Path(sys.argv[1]).exists():
         raise FileNotFoundError('The path you entered does not exist!')
-    mm_data_file = sys.argv[1]
-    with open(mm_data_file) as j:
-        mm_data = json.load(j)
+    md_data_file = sys.argv[1]
+    with open(md_data_file) as j:
+        md_data = json.load(j)
 
-    data = get_all_tasks(4)
+    data = get_all_tasks(project_id=1)
     # with open('tasks_latest.json') as j:
     #     data = json.load(j)
     tasks_ids = [x['id'] for x in data]
 
+    i = 0
     for cur_task in tqdm(tasks_ids):
-        main(cur_task)
+        try:
+            out = main(cur_task)
+            if out:
+                i += 1
+        except KeyboardInterrupt:
+            sys.exit('Interrupted by the user...')
+    logger.info(f'Total number of predictions applied: {i}')
