@@ -96,6 +96,8 @@ cd "/home/ubuntu/apps/label-studio"
 
 ```sh
 source .env && docker run --rm -v "$PWD/pg_backups:/backups" -e POSTGRES_HOST=${_POSTGRES_HOST} -e POSTGRES_DB=${POSTGRE_NAME} -e POSTGRES_USER=${POSTGRE_USER} -e POSTGRES_PASSWORD=${POSTGRE_PASSWORD} prodrigestivill/postgres-backup-local /backup.sh
+
+rclone copy pg_backups pg_backups: -P --stats-one-line -L
 ```
 
 - Download the files
