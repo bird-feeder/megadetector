@@ -66,7 +66,7 @@ set NEW_FOLDER_NAME="downloaded_`date +%m-%d-%Y`"
 
 ```sh
 module load conda tensorflow
-python exclude_specific_classes.py --images-dir "picam" --exclude "fox_squirrel"
+python exclude_specific_classes.py --images-dir "picam/$NEW_FOLDER_NAME"" --exclude "fox_squirrel"
 ```
 
 
