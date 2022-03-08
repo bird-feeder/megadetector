@@ -26,7 +26,9 @@ malyeta@ncsu.edu                            `  `.`.`._`.-._`--.)
 
 
 set GOOGLE_DRIVE_FOLDER_FULL_PATH="picam"
-set IMAGES_DIR=`basename "${GOOGLE_DRIVE_FOLDER_FULL_PATH}"`
+set NEW_FOLDER_NAME="downloaded_`date +%m-%d-%Y`"
+mkdir -p "picam/$NEW_FOLDER_NAME"
+set IMAGES_DIR="picam/$NEW_FOLDER_NAME"
 
 set CONFIDENCE="0.8"
 
@@ -53,4 +55,5 @@ echo "\nFinished downloading!\n"
 bsub -env "IMAGES_DIR='$IMAGES_DIR', CONFIDENCE='$CONFIDENCE', GROUP='$GROUP', USER='$USER'" < megadetector_job.csh
 
 sleep 5
+bjobs
 echo "Check status by running: bjobs\n"
