@@ -225,13 +225,6 @@ if __name__ == '__main__':
         restored_results = []
 
     if not args.ckpt:
-        restored_results = []
-        
-    
-    ckpt_path = 'picam/output/checkpoint_20220308_125555.json'  # delete me
-    with open(ckpt_path) as f:  # delete me
-        saved = json.load(f)  # delete me
-    restored_results = saved['images']  # delete me
-    
+        restored_results = []    
 
     main(args.images_dir, float(args.confidence), restored_results)
