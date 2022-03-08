@@ -29,11 +29,11 @@ cat <<'EOF'
                                                                           
 'EOF'
 
-if ( $RCLONE_ANS == y | $RCLONE_ANS == Y ) set DRIE_SHARED_WITH_ME=""
+if ( $RCLONE_ANS == y | $RCLONE_ANS == Y ) set DRIVE_SHARED_WITH_ME=""
 if ( $RCLONE_ANS == n | $RCLONE_ANS == N ) set DRIVE_SHARED_WITH_ME="--drive-shared-with-me"
 
-eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/" --include "*.json" --max-depth 1 gdrive:"picam-detections/$NEW_FOLDER_NAME" --transfers 32 -P --stats-one-line'
-eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/with_detections" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections" --transfers 32 -P --stats-one-line'
-eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/output/with_detections_excluded" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections_excluded" --transfers 32 -P --stats-one-line'
+eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/$NEW_FOLDER_NAME/output/" --include "*.json" --max-depth 1 gdrive:"picam-detections/$NEW_FOLDER_NAME" --transfers 32 -P --stats-one-line'
+eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/$NEW_FOLDER_NAME/output/with_detections" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections" --transfers 32 -P --stats-one-line'
+eval './rclone $DRIVE_SHARED_WITH_ME copy "picam/$NEW_FOLDER_NAME/output/with_detections_excluded" gdrive:"picam-detections/$NEW_FOLDER_NAME/with_detections_excluded" --transfers 32 -P --stats-one-line'
 
 echo "\nFinished uploading!\n"
