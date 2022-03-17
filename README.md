@@ -115,3 +115,13 @@ rclone --drive-shared-with-me copy gdrive:"downloaded_$(date +%m-%d-%Y)" "$NEW_F
 ```sh
 python sync_picam.py
 ```
+
+- Add the new data to MongoDB
+
+```sh
+DATA_FILE=$(fd "data_*" $NEW_FOLDER_NAME)
+cd /home/ubuntu/model
+python mongodb_helpers.py "/home/ubuntu/apps/label-studio/$DATA_FILE"
+```
+
+- Run the prediction job on Azure ML
