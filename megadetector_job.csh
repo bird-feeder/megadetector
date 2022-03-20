@@ -2,8 +2,8 @@
 #BSUB -n 1
 #BSUB -W 01:00
 #BSUB -J megadetector_%J
-#BSUB -o logs/megadetector_%J.out
-#BSUB -e logs/megadetector_%J.err
+#BSUB -o logs/%J.out
+#BSUB -e logs/%J.err
 #BSUB -q gpu
 #BSUB -R "select[rtx2080||gtx1080||p100]"
 #BSUB -gpu "num=2:mode=shared:mps=yes"
