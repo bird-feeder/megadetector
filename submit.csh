@@ -52,7 +52,7 @@ if ( $RCLONE_ANS == y | $RCLONE_ANS == Y ) ./rclone copy gdrive:"$GOOGLE_DRIVE_F
 if ( $RCLONE_ANS == n | $RCLONE_ANS == N ) ./rclone --drive-shared-with-me copy gdrive:"$GOOGLE_DRIVE_FOLDER_FULL_PATH" "$IMAGES_DIR" --transfers 32 -P --stats-one-line
 echo "\nFinished downloading!\n"
 
-bsub -env "IMAGES_DIR='$IMAGES_DIR', CONFIDENCE='$CONFIDENCE', GROUP='$GROUP', USER='$USER'" < megadetector_job.csh
+bsub -env "GROUP='$GROUP', USER='$USER'" < megadetector_job.csh
 
 sleep 5
 bjobs
