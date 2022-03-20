@@ -15,4 +15,7 @@ set AVAIL_GPUS=`python helpers.py --gpus`
 echo "AVAIL_GPUS: $AVAIL_GPUS"
 if ( $AVAIL_GPUS == "" ) set AVAIL_GPUS="1"
 
-setenv CUDA_VISIBLE_DEVICES "$AVAIL_GPUS"; python megadetector.py --images-dir "/gpfs_common/share03/$GROUP/$USER/megadetector_picam/picam" --confidence "0.8" --animal-only
+set NEW_FOLDER_NAME="downloaded_`date +%m-%d-%Y`"
+set IMAGES_DIR="/gpfs_common/share03/$GROUP/$USER/megadetector_picam/picam/$NEW_FOLDER_NAME"
+
+setenv CUDA_VISIBLE_DEVICES "$AVAIL_GPUS"; python megadetector.py --images-dir "$IMAGES_DIR" --jobid "$LSB_JOBID" --confidence "0.8" --animal-only
